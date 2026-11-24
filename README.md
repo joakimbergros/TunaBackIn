@@ -28,6 +28,17 @@ This produces `artifacts/Jellyfin.Plugin.TunaBackIn.dll`. It is the only file th
 
 ## Install
 
+### From the plugin repository (recommended)
+
+1. In Jellyfin, go to Dashboard → Plugins → Repositories (the gear icon in the Catalog) → **+**, and add:
+   - Name: `TunaBackIn`
+   - URL: `https://raw.githubusercontent.com/joakimbergros/TunaBackIn/main/manifest.json`
+2. Open the Catalog → **TunaBackIn** → Install, then restart Jellyfin.
+
+New versions then appear as updates in the Jellyfin UI.
+
+### Manually
+
 Copy the DLL into a folder under the server's `plugins` directory, then restart Jellyfin:
 
 ```sh
@@ -51,6 +62,19 @@ Check the install:
 2. Reload jellyfin-web (on the TV too).
 3. Open Dashboard → Plugins → TunaBackIn → **Show test prompt**. If it says the client script is
    not loaded, the `index.html` injection didn't work on this server. Open an issue or check the server log.
+
+## Releasing
+
+Update `changelog` in `build.yaml` (and `targetAbi` plus `JellyfinVersion` in `Directory.Build.props` if the
+server version changed), commit, then tag and push:
+
+```sh
+git tag v0.2.0.0 && git push origin main v0.2.0.0
+```
+
+The [Release workflow](.github/workflows/release.yaml) runs the tests, builds the DLL with the tag's version,
+attaches `tunabackin_<version>.zip` to a GitHub Release, and commits the new entry to `manifest.json` on `main`
+(via [`scripts/update_manifest.py`](scripts/update_manifest.py)). Tags must have four parts (`vX.Y.Z.W`).
 
 ## Settings
 
