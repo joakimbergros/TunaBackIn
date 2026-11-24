@@ -1,0 +1,16 @@
+---
+name: "TunaBackIn"
+guid: "a93319c1-7235-4d29-bfff-ab2e97493604"
+version: "0.1.0.0"
+targetAbi: "12.4.0.0"
+framework: "net10.0"
+overview: "Offer to continue your music after watching something"
+description: >
+  Remembers the music queue that was playing when you started a video and,
+  when the video ends, offers "Continue music streaming of X" in jellyfin-web.
+category: "General"
+owner: "jocke"
+artifacts:
+- "Jellyfin.Plugin.TunaBackIn.dll"
+changelog: >
+  Initial version.

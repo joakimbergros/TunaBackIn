@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Jellyfin.Plugin.TunaBackIn/Jellyfin.Plugin.TunaBackIn.csproj" />
+  <Project Path="tests/Jellyfin.Plugin.TunaBackIn.Tests/Jellyfin.Plugin.TunaBackIn.Tests.csproj" />
+</Solution>

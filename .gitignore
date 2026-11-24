@@ -1,0 +1,6 @@
+artifacts
+bin/
+.idea/
+obj/
+spike/snapshot.json
+.vs/
