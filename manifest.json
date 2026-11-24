@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "a93319c1-7235-4d29-bfff-ab2e97493604",
+    "versions": [
+      {
+        "version": "0.1.0.0",
+        "changelog": "Initial version.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/joakimbergros/TunaBackIn/releases/download/v0.1.0.0/tunabackin_0.1.0.0.zip",
+        "checksum": "c7d78d0b89cadb72a845e84ca3f47dad",
+        "timestamp": "2026-11-24T16:03:10Z"
+      }
+    ],
+    "name": "TunaBackIn",
+    "overview": "Tune back in to your music after the show",
+    "description": "Remembers the music queue that was playing when you started a video and, when the video ends, offers \"Continue music streaming of X\" in jellyfin-web.",
+    "owner": "joakimbergros",
+    "category": "General"
+  }
+]
