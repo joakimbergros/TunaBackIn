@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TunaBackIn</title>
+</head>
+<body>
+    <div id="TunaBackInConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <form id="TunaBackInConfigForm">
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="ShowPrompt" name="ShowPrompt" type="checkbox" is="emby-checkbox" />
+                            <span>Show "Continue music streaming" prompt</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">After a video ends, jellyfin-web offers to resume the music that was playing before it.</div>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="AutoResume" name="AutoResume" type="checkbox" is="emby-checkbox" />
+                            <span>Resume automatically</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">Resume the music without asking a few seconds after the video ends (unless another video starts).</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="MusicRecentSeconds">Music must have played within (seconds)</label>
+                        <input id="MusicRecentSeconds" name="MusicRecentSeconds" type="number" is="emby-input" min="5" />
+                        <div class="fieldDescription">A video only arms a resume if music played this recently on the same device.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="OfferExpiryHours">Offer expires after (hours)</label>
+                        <input id="OfferExpiryHours" name="OfferExpiryHours" type="number" is="emby-input" min="1" />
+                    </div>
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                            <span>Save</span>
+                        </button>
+                        <button is="emby-button" type="button" id="TunaBackInTest" class="raised block emby-button">
+                            <span>Show test prompt</span>
+                        </button>
+                        <div class="fieldDescription" id="TunaBackInTestResult"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var TunaBackInConfig = {
+                pluginUniqueId: 'a93319c1-7235-4d29-bfff-ab2e97493604'
+            };
+
+            document.querySelector('#TunaBackInConfigPage')
+                .addEventListener('pageshow', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(TunaBackInConfig.pluginUniqueId).then(function (config) {
+                        document.querySelector('#ShowPrompt').checked = config.ShowPrompt;
+                        document.querySelector('#AutoResume').checked = config.AutoResume;
+                        document.querySelector('#MusicRecentSeconds').value = config.MusicRecentSeconds;
+                        document.querySelector('#OfferExpiryHours').value = config.OfferExpiryHours;
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+            document.querySelector('#TunaBackInTest')
+                .addEventListener('click', function () {
+                    var result = document.querySelector('#TunaBackInTestResult');
+                    if (window.TunaBackIn) {
+                        window.TunaBackIn.showTest();
+                        result.textContent = 'Client script is loaded (v' + window.TunaBackIn.version + ').';
+                    } else {
+                        result.textContent = 'Client script is NOT loaded on this page: index.html injection did not work. Reload the page and try again.';
+                    }
+                });
+
+            document.querySelector('#TunaBackInConfigForm')
+                .addEventListener('submit', function (e) {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(TunaBackInConfig.pluginUniqueId).then(function (config) {
+                        config.ShowPrompt = document.querySelector('#ShowPrompt').checked;
+                        config.AutoResume = document.querySelector('#AutoResume').checked;
+                        config.MusicRecentSeconds = parseInt(document.querySelector('#MusicRecentSeconds').value, 10) || 120;
+                        config.OfferExpiryHours = parseInt(document.querySelector('#OfferExpiryHours').value, 10) || 6;
+                        ApiClient.updatePluginConfiguration(TunaBackInConfig.pluginUniqueId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    });
+
+                    e.preventDefault();
+                    return false;
+                });
+        </script>
+    </div>
+</body>
+</html>
